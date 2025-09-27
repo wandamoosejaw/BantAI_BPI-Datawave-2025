@@ -5,343 +5,314 @@ def inject_custom_css():
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+                
 
-    /* Global font */
-    html, body, [class*="css"] {
-        font-family: 'Poppins', sans-serif !important;
-        color: #333333 !important;
-    }
-
-    /* FIXED: Sidebar styling with Poppins font */
-    section[data-testid="stSidebar"] {
-        background-color: #F5F5F5 !important;
-        font-family: 'Poppins', sans-serif !important;
-    }
-
-    /* FIXED: Force Poppins on all sidebar elements */
-    section[data-testid="stSidebar"] * {
-        font-family: 'Poppins', sans-serif !important;
-        color: #333333 !important;
-    }
-
-    /* FIXED: Sidebar navigation links */
-    section[data-testid="stSidebar"] .css-17lntkn,
-    section[data-testid="stSidebar"] [data-testid="stSidebarNav"],
-    section[data-testid="stSidebar"] [data-testid="stSidebarNav"] * {
-        font-family: 'Poppins', sans-serif !important;
-        color: #333333 !important;
-        background-color: transparent !important;
-    }
-
-    /* FIXED: Sidebar buttons and links */
-    section[data-testid="stSidebar"] button,
-    section[data-testid="stSidebar"] a,
-    section[data-testid="stSidebar"] .stButton,
-    section[data-testid="stSidebar"] .stSelectbox {
-        font-family: 'Poppins', sans-serif !important;
-        color: #333333 !important;
-    }
-
-    /* FIXED: Override any conflicting column styles for sidebar */
-    section[data-testid="stSidebar"] div.stColumn,
-    section[data-testid="stSidebar"] div.stColumn * {
-        background-color: transparent !important;
-        font-family: 'Poppins', sans-serif !important;
-        color: #333333 !important;
-    }
-
-    /* FIXED: Remove the login page column styling from sidebar */
-    section[data-testid="stSidebar"] div.stColumn:first-child,
-    section[data-testid="stSidebar"] div.stColumn:nth-child(2) {
-        background-color: transparent !important;
-        padding: 0 !important;
-        border-radius: 0 !important;
-        min-height: auto !important;
-    }
-
-    /* Hide Streamlit's default navigation */
-    section[data-testid="stSidebarNav"] {
+    /* Immediate hide - runs before page fully loads */
+        button[kind="header"] {
         display: none !important;
+        visibility: hidden !important;
     }
 
-    /* Metric number highlight */
-    div[data-testid="stMetricValue"] {
-        color: #E63946 !important;
+    /* FORCE Poppins everywhere - highest specificity */
+    html, body, [class*="css"], *, 
+    section[data-testid="stSidebar"], 
+    section[data-testid="stSidebar"] *,
+    section[data-testid="stSidebarNav"],
+    section[data-testid="stSidebarNav"] * {
+        font-family: 'Poppins', sans-serif !important;
+        color: #333333 !important;
     }
 
-    /* Keep logo pinned at top of sidebar */
+    /* Hide unwanted Streamlit elements */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+
+
+
+    /* Sidebar styling - WHITE background */
+    section[data-testid="stSidebar"] {
+        background-color: #FFFFFF !important;
+        font-family: 'Poppins', sans-serif !important;
+    }
+
+    section[data-testid="stSidebar"] > div {
+        background-color: #FFFFFF !important;
+        font-family: 'Poppins', sans-serif !important;
+    }
+
+    /* Force Poppins on ALL sidebar elements */
+    section[data-testid="stSidebar"] *,
+    section[data-testid="stSidebar"] div,
+    section[data-testid="stSidebar"] span,
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] a,
+    section[data-testid="stSidebar"] button {
+        font-family: 'Poppins', sans-serif !important;
+        color: #333333 !important;
+    }
+
+    /* Streamlit's native navigation styling with Poppins */
+    section[data-testid="stSidebarNav"] {
+        font-family: 'Poppins', sans-serif !important;
+        display: block !important;
+        margin-top: 1rem !important;
+    }
+
+    section[data-testid="stSidebarNav"] ul {
+        padding: 0 !important;
+        margin: 0 !important;
+        font-family: 'Poppins', sans-serif !important;
+        list-style: none !important;
+    }
+
+    section[data-testid="stSidebarNav"] li {
+        list-style: none !important;
+        margin-bottom: 0.5rem !important;
+        font-family: 'Poppins', sans-serif !important;
+    }
+
+    section[data-testid="stSidebarNav"] a {
+        display: block !important;
+        padding: 0.75rem 1rem !important;
+        color: #333333 !important;
+        text-decoration: none !important;
+        border-radius: 8px !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 500 !important;
+        transition: background-color 0.2s ease !important;
+    }
+
+    section[data-testid="stSidebarNav"] a:hover {
+        background-color: #f8f9fa !important;
+    }
+
+    /* Active page styling */
+    section[data-testid="stSidebarNav"] a[aria-current="page"] {
+        background-color: #e3f2fd !important;
+        font-weight: 600 !important;
+    }
+
+    /* Custom sidebar buttons styling */
+    section[data-testid="stSidebar"] .stButton > button {
+        width: 100% !important;
+        text-align: center !important;
+        background-color: #E63946 !important;
+        color: white !important;
+        border: none !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 500 !important;
+        padding: 0.75rem 1rem !important;
+        border-radius: 8px !important;
+        transition: background-color 0.2s ease !important;
+    }
+
+    section[data-testid="stSidebar"] .stButton > button:hover {
+        background-color: #c73035 !important;
+    }
+
+    /* Logo styling */
     section[data-testid="stSidebar"] img {
         display: block;
         margin-left: auto;
         margin-right: auto;
         max-width: 120px;
-        position: relative;
-        top: 0;
-        z-index: 1000;
+        margin-bottom: 1rem;
     }
 
-    /* Push nav menu down below logo */
-    [data-testid="stSidebarNav"] {
-        margin-top: 20px !important;
-    }
-
-    ####LOGIN STYLE CONFIG          
-    /* Login page two-column background colors */
-            [data-testid="stHorizontalBlock"] > div:nth-child(1) {
-                background-color: #FFFFFF;
-                padding: 30px;
-                border-radius: 8px;
-            }
-    /* Column 1: Form */
-        [data-testid="stForm"] {
-        background-color: transparent;   /* remove box background */
-        box-shadow: none;                /* remove box shadow */
-        border: none;                    /* remove border */
-        padding: 0;
-        }
-
-    /* Form input fields */
-        [data-testid="stForm"] input {
-            background-color: #F5F5F5;   /* field background */
-            border: none;                /* remove all borders */
-            border-radius: 6px;          /* smooth corners */
-            padding: 10px;
-            width: 100%;                 /* span full column */
-            box-shadow: none;            /* no outline */
-        }
-
-    /* Remove black stroke when typing */
-        [data-testid="stForm"] input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px #c7c7c7;   /* subtle gray glow instead of black stroke */
-        }
-
-            
-    /* Force col1 (first column) background + font - ONLY for main content, not sidebar */
-        .main div.stColumn:first-child {
-            background-color: #FFFFFF !important;
-            padding: 30px;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif !important;
-            color: #333333 !important;
-            min-height: 100vh;   /* fill full viewport height */
-        }
-
-
-    /* Ensure col2 (second column) has gray bg - ONLY for main content, not sidebar */
-            .main div.stColumn:nth-child(2) {
-                background-color: #F5F5F5 !important;
-                padding: 30px;
-                border-radius: 8px;
-            } 
-
-    /* Force Poppins inside all main content columns - not sidebar */
-            .main div.stColumn, .main div.stColumn * {
-                font-family: 'Poppins', sans-serif !important;
-                color: #333333 !important;
-            }
-         
-     /* Main container styling */
+    /* Main container styling */
     .main .block-container {
-        padding-top: 2rem;
+        padding-top: 1rem;
         padding-bottom: 2rem;
         max-width: 100%;
     }
-    
-    /* Title styling */
+
+    /* Typography - force Poppins */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Poppins', sans-serif !important;
+        color: #2c3e50 !important;
+    }
+
     h1 {
         font-size: 2.5rem !important;
         font-weight: 600 !important;
-        color: #2c3e50 !important;
         margin-bottom: 0.5rem !important;
+    }
+
+    h3 {
+        font-weight: 600 !important;
+        font-size: 1.25rem !important;
+    }
+
+    /* Metric containers styling */
+    div[data-testid="metric-container"] {
+        background: white !important;
+        border: 1px solid #DDDDDD !important;
+        border-radius: 12px !important;
+        padding: 1rem !important;
+        box-shadow: none !important;
+    }
+
+    /* Metric values with Poppins */
+    div[data-testid="stMetricValue"] {
+        color: #E63946 !important;
         font-family: 'Poppins', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 2rem !important;
     }
-    
-    /* FIXED: Row containers for proper grouping */
-    .metrics-row {
-        background: transparent;
-        margin-bottom: 2rem;
+
+    div[data-testid="stMetricLabel"] {
+        font-family: 'Poppins', sans-serif !important;
+        color: #6c757d !important;
+        font-weight: 500 !important;
     }
-    
-    .charts-row {
-        background: transparent;
-        margin-bottom: 2rem;
-    }
-    
-    .bottom-row {
-        background: transparent;
-        margin-bottom: 2rem;
-    }
-    
-    /* FIXED: Container wrappers that actually contain Streamlit elements */
-    .chart-container-wrapper {
-        background: white !important;
-        padding: 1.5rem !important;
-        border-radius: 12px !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-        border: 1px solid #e9ecef !important;
-        margin-bottom: 1rem !important;
-        height: 100% !important;
-    }
-    
-    .table-container-wrapper {
-        background: white !important;
-        padding: 1.5rem !important;
-        border-radius: 12px !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-        border: 1px solid #e9ecef !important;
-        margin-bottom: 1rem !important;
-        height: 100% !important;
-    }
-    
-    .right-panel-wrapper {
-        background: white !important;
-        padding: 1.5rem !important;
-        border-radius: 12px !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-        border: 1px solid #e9ecef !important;
-        height: 100% !important;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .pie-chart-section {
-        margin-bottom: 1rem;
-    }
-    
-    .bottom-metrics-section {
-        margin-top: auto;
-    }
-    
-    /* FIXED: Target actual Streamlit column containers */
+
+    /* Column containers */
     div[data-testid="column"] {
         padding: 0.5rem !important;
     }
-    
-    div[data-testid="column"] > div {
-        height: 100%;
-    }
-    
-    /* Metric cards */
-    .metric-card {
-        background: white !important;
-        padding: 1.5rem !important;
-        border-radius: 12px !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-        border: 1px solid #e9ecef !important;
-        text-align: center !important;
-        margin-bottom: 1rem !important;
-        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-        height: 120px !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-    }
-    
-    .metric-card:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
-    }
-    
-    .metric-value {
-        font-size: 2.5rem !important;
-        font-weight: 700 !important;
-        color: #2c3e50 !important;
-        margin-bottom: 0.5rem !important;
+
+    /* Dataframe styling with Poppins */
+    div[data-testid="stDataFrame"],
+    div[data-testid="stDataFrame"] *,
+    div[data-testid="stDataFrame"] table,
+    div[data-testid="stDataFrame"] th,
+    div[data-testid="stDataFrame"] td {
         font-family: 'Poppins', sans-serif !important;
+        color: #333333 !important;
     }
-    
-    .metric-label {
-        font-size: 0.9rem !important;
-        color: #6c757d !important;
-        font-weight: 500 !important;
-        font-family: 'Poppins', sans-serif !important;
-    }
-    
-    /* Chart titles */
-    .chart-title {
-        font-size: 1.25rem !important;
-        font-weight: 600 !important;
-        color: #2c3e50 !important;
-        margin-bottom: 1rem !important;
-        margin-top: 0 !important;
-        font-family: 'Poppins', sans-serif !important;
-    }
-    
-    /* Bottom metrics styling */
-    .bottom-metric {
-        margin-bottom: 1.5rem !important;
-        text-align: center !important;
-    }
-    
-    .bottom-metric-value {
-        font-size: 2rem !important;
-        font-weight: 700 !important;
-        color: #2c3e50 !important;
-        margin-bottom: 0.25rem !important;
-        font-family: 'Poppins', sans-serif !important;
-    }
-    
-    .bottom-metric-label {
-        font-size: 0.85rem !important;
-        color: #6c757d !important;
-        font-weight: 500 !important;
-        line-height: 1.3 !important;
-        font-family: 'Poppins', sans-serif !important;
-    }
-    
-    /* FIXED: Target Streamlit's actual dataframe container */
+
     div[data-testid="stDataFrame"] {
         border: none !important;
         background: transparent !important;
     }
-    
+
     div[data-testid="stDataFrame"] > div {
         border: none !important;
         border-radius: 8px !important;
     }
-    
-    /* FIXED: Remove gaps between elements */
-    div[data-testid="element-container"] {
-        margin-bottom: 0 !important;
-    }
-    
-    div[data-testid="stVerticalBlock"] > div[style*="gap"] {
-        gap: 0.5rem !important;
-    }
-    
-    /* FIXED: Target Streamlit's chart containers */
+
+    /* Chart containers */
     div[data-testid="stVegaLiteChart"] {
         background: transparent !important;
         border: none !important;
         margin: 0 !important;
     }
-    
-    /* Hide streamlit default elements */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    
+
+    /* Remove element gaps */
+    div[data-testid="element-container"] {
+        margin-bottom: 0 !important;
+    }
+
     /* Custom scrollbar */
     ::-webkit-scrollbar {
         width: 8px;
     }
-    
+
     ::-webkit-scrollbar-track {
         background: #f1f1f1;
     }
-    
+
     ::-webkit-scrollbar-thumb {
         background: #c1c1c1;
         border-radius: 4px;
     }
-    
+
     ::-webkit-scrollbar-thumb:hover {
         background: #a8a8a8;
-    }               
-                
-    </style>
+    }
     
+    /* Completely hide the broken collapse button */
+    button[kind="header"],
+    button[title="Close sidebar"],
+    button[aria-label="Close sidebar"],
+    *[data-testid*="collaps"] {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Hide any element containing keyboard_arrow text */
+*   :contains("keyboard_arrow") {
+    display: none !important;
+    }
                 
-        
+    /* Nuclear option - hide all possible collapse button selectors */
+        button[kind="header"],
+        button[title="Close sidebar"],
+        button[aria-label="Close sidebar"],
+        button[data-testid*="collaps"],
+        .css-1544g2n,
+        .css-1cypcdb,
+        .css-18ni7ap,
+        [class*="collapse"],
+        [class*="sidebar"][class*="button"],
+        button:contains("keyboard_arrow"),
+        *:contains("keyboard_arrow_double") {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+    }
+
+/* Hide any button in the sidebar header area */
+    section[data-testid="stSidebar"] > div:first-child button {
+        display: none !important;
+    }
+
+/* Alternative: Hide the entire top area of sidebar */
+    section[data-testid="stSidebar"] > div:first-child > div:first-child {
+    display: none !important;
+}
+                
+/* Add BantAI text as CSS */
+section[data-testid="stSidebar"]::before {
+    content: "BantAI";
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #E63946;
+    text-align: center;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+/* Add spacing after logo */
+    section[data-testid="stSidebarNav"] {
+        font-family: 'Poppins', sans-serif !important;
+        display: block !important;
+        margin-top: 1rem !important;
+        padding-top: 0 !important;
+    }
+                
+/* Add proper spacing to sidebar navigation */
+    section[data-testid="stSidebarNav"] {
+        font-family: 'Poppins', sans-serif !important;
+        display: block !important;
+        margin-top: 2rem !important;  /* Increased from 1rem */
+        padding-top: 1rem !important;
+    }
+
+/* Add some breathing room to the entire sidebar content */
+    section[data-testid="stSidebar"] > div {
+        padding-top: 1.5rem !important;
+    }
+                
+    # Add to your utils/style.py
+    /* Hide broken Material Icons */
+    *:contains("keyboard_arrow") {
+        display: none !important;
+    }
+
+    /* Hide any broken icon text */
+    span:contains("keyboard_arrow_right"),
+    span:contains("keyboard_arrow_left"),
+    span:contains("keyboard_arrow_double") {
+        display: none !important;
+        visibility: hidden !important;
+}
+
+    </style>
     """, unsafe_allow_html=True)

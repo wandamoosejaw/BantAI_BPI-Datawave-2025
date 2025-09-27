@@ -85,7 +85,7 @@ if not st.session_state.authenticated:
                 st.session_state.authenticated = True
                 st.success("Login successful! Redirecting...")
                 time.sleep(1)
-                st.switch_page("pages/1_Dashboard.py")
+                st.switch_page("pages/1_BantAI Dashboard.py")
             else:
                 st.error("Invalid username or password")
 
@@ -94,4 +94,7 @@ if not st.session_state.authenticated:
 
 # --- Auto-redirect if already logged in ---
 else:
-    st.switch_page("pages/1_Dashboard.py")
+    st.switch_page("pages/1_BantAI Dashboard.py")
+
+
+    
