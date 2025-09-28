@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.style import inject_custom_css
-from utils.database import get_login_activities, update_action  # Add this import
+from utils.database import get_login_activities, update_action
 
 st.set_page_config(page_title="Recent Login Activities", layout="wide")
 inject_custom_css()

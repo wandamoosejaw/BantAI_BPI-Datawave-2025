@@ -235,6 +235,10 @@ def generate_recommendation(action, analysis_factors, location_context):
         return f"ALLOW with SMS OTP: Possible legitimate travel, verify with additional authentication."
     else:  # BLOCK
         return f"BLOCK: High risk detected, prevent access and require manual review."
+    
+def update_action(activity_id, action):
+    """Legacy function - redirects to enhanced version"""
+    return update_admin_action(activity_id, action)
 
 def initialize_database():
     """Create enhanced tables with realistic sample data"""
@@ -300,7 +304,8 @@ def initialize_database():
         ('U_0789', 'ana_garcia_012', 'ana@email.com', '["Singapore"]', '["desktop"]'),
         ('U_5550', 'carlos_reyes_345', 'carlos@email.com', '["Cebu", "Mandaue"]', '["tablet", "mobile"]'),
         ('U_7777', 'sarah_lim_678', 'sarah@email.com', '["Dubai", "Manila"]', '["mobile"]'),
-        ('U_8888', 'pedro_santos_901', 'pedro@email.com', '["Iloilo", "Bacolod"]', '["desktop"]')
+        ('U_8888', 'pedro_santos_901', 'pedro@email.com', '["Iloilo", "Bacolod"]', '["desktop"]'),
+        ('U_TEST_001', 'test_user_001', 'test001@email.com', '["Makati", "Taguig", "Manila"]', '["mobile", "desktop"]')
     ]
     
     cursor.executemany('''
@@ -364,7 +369,58 @@ def initialize_database():
          'Philippines', 'Iloilo', 12.0, 520, 'desktop', 95, 0, 0,
          0.380, 38.0, 'MEDIUM', 'ALLOW_WITH_OTP', 'ALLOW with SMS OTP: Possible legitimate travel, verify with additional authentication.',
          '["Travel is plausible (Domestic travel)", "Behavior consistency: 80%", "Location: Domestic location", "Device type: desktop"]',
-         '["⚠ Failed login attempt"]', 80, 'Domestic location', 'Pending Review')
+         '["⚠ Failed login attempt"]', 80, 'Domestic location', 'Pending Review'),
+         
+        # Add the U_TEST_001 timeline data
+        ('U_TEST_001', '2024-01-02 08:15:00', 'Philippines', 'Makati', 0.0, 0, 'mobile', 85, 1, 0,
+         0.050, 5.0, 'LOW', 'ALLOW', 'ALLOW: Legitimate domestic login with consistent behavior.',
+         '["Travel is plausible (Same location or local area)", "Behavior consistency: 95%", "Location: Domestic location", "Device type: mobile"]',
+         '[]', 95, 'Domestic location', 'Pending Review'),
+
+        ('U_TEST_001', '2024-01-02 12:30:00', 'Philippines', 'Taguig', 4.25, 8, 'desktop', 45, 1, 0,
+         0.080, 8.0, 'LOW', 'ALLOW', 'ALLOW: Legitimate travel with consistent behavior.',
+         '["Travel is plausible (Same location or local area)", "Behavior consistency: 90%", "Location: Domestic location", "Device type: desktop"]',
+         '[]', 90, 'Domestic location', 'Pending Review'),
+
+        ('U_TEST_001', '2024-01-02 19:45:00', 'Philippines', 'Makati', 7.25, 8, 'mobile', 90, 1, 0,
+         0.060, 6.0, 'LOW', 'ALLOW', 'ALLOW: Legitimate travel with consistent behavior.',
+         '["Travel is plausible (Same location or local area)", "Behavior consistency: 95%", "Location: Domestic location", "Device type: mobile"]',
+         '[]', 95, 'Domestic location', 'Pending Review'),
+
+        ('U_TEST_001', '2024-01-03 07:30:00', 'Philippines', 'Quezon City', 11.75, 18, 'mobile', 110, 1, 0,
+         0.100, 10.0, 'LOW', 'ALLOW', 'ALLOW: Legitimate travel with consistent behavior.',
+         '["Travel is plausible (Same location or local area)", "Behavior consistency: 90%", "Location: Domestic location", "Device type: mobile"]',
+         '[]', 90, 'Domestic location', 'Pending Review'),
+
+        ('U_TEST_001', '2024-01-03 13:15:00', 'Philippines', 'Manila', 5.75, 12, 'desktop', 55, 1, 0,
+         0.070, 7.0, 'LOW', 'ALLOW', 'ALLOW: Legitimate travel with consistent behavior.',
+         '["Travel is plausible (Same location or local area)", "Behavior consistency: 92%", "Location: Domestic location", "Device type: desktop"]',
+         '[]', 92, 'Domestic location', 'Pending Review'),
+
+        ('U_TEST_001', '2024-01-03 20:00:00', 'Philippines', 'Pasig', 6.75, 15, 'mobile', 95, 1, 0,
+         0.085, 8.5, 'LOW', 'ALLOW', 'ALLOW: Legitimate travel with consistent behavior.',
+         '["Travel is plausible (Same location or local area)", "Behavior consistency: 88%", "Location: Domestic location", "Device type: mobile"]',
+         '[]', 88, 'Domestic location', 'Pending Review'),
+
+        ('U_TEST_001', '2024-01-06 14:30:00', 'Philippines', 'Mandaluyong', 66.5, 10, 'mobile', 120, 1, 0,
+         0.110, 11.0, 'LOW', 'ALLOW', 'ALLOW: Legitimate travel with consistent behavior.',
+         '["Travel is plausible (Same location or local area)", "Behavior consistency: 85%", "Location: Domestic location", "Device type: mobile"]',
+         '[]', 85, 'Domestic location', 'Pending Review'),
+
+        ('U_TEST_001', '2024-01-08 09:00:00', 'Philippines', 'Makati', 42.5, 12, 'desktop', 70, 1, 0,
+         0.065, 6.5, 'LOW', 'ALLOW', 'ALLOW: Legitimate travel with consistent behavior.',
+         '["Travel is plausible (Same location or local area)", "Behavior consistency: 93%", "Location: Domestic location", "Device type: desktop"]',
+         '[]', 93, 'Domestic location', 'Pending Review'),
+
+        ('U_TEST_001', '2024-01-10 16:45:00', 'Philippines', 'Parañaque', 55.75, 25, 'mobile', 140, 1, 0,
+         0.130, 13.0, 'LOW', 'ALLOW', 'ALLOW: Legitimate travel with consistent behavior.',
+         '["Travel is plausible (Same location or local area)", "Behavior consistency: 80%", "Location: Domestic location", "Device type: mobile"]',
+         '[]', 80, 'Domestic location', 'Pending Review'),
+
+        ('U_TEST_001', '2024-01-11 10:30:00', 'Philippines', 'Taguig', 17.75, 22, 'desktop', 65, 1, 0,
+         0.090, 9.0, 'LOW', 'ALLOW', 'ALLOW: Legitimate travel with consistent behavior.',
+         '["Travel is plausible (Same location or local area)", "Behavior consistency: 88%", "Location: Domestic location", "Device type: desktop"]',
+         '[]', 88, 'Domestic location', 'Pending Review')
     ]
     
     cursor.executemany('''
@@ -382,7 +438,7 @@ def initialize_database():
     print("✅ Fresh enhanced database initialized successfully!")
     print(f"✅ Added {len(sample_users)} users and {len(sample_activities)} login activities")
 
-def get_login_activities_enhanced():
+def get_login_activities():
     """Get login activities with enhanced model output"""
     conn = get_connection()
     query = '''
@@ -420,6 +476,10 @@ def get_login_activities_enhanced():
         df['Warnings'] = df['Warnings'].apply(lambda x: json.loads(x) if x else [])
     
     return df
+
+def get_dashboard_metrics():
+    """Legacy function - redirects to enhanced version"""
+    return get_dashboard_metrics_enhanced()
 
 def get_dashboard_metrics_enhanced():
     """Get enhanced dashboard metrics"""
@@ -528,14 +588,45 @@ def get_detection_accuracy():
            OR (risk_percentage < 70 AND admin_action = 'False Positive')
            OR (admin_action = 'Confirmed Correct')
     ''').fetchone()[0]
-    
+
+def get_login_activities_enhanced():
+    """Get login activities with enhanced model output"""
+    conn = get_connection()
+    query = '''
+        SELECT 
+            la.id as "#",
+            la.user_id as "User ID",
+            la.login_timestamp as "Login Timestamp (UTC+8)",
+            la.country as "Country",
+            la.city as "City",
+            la.time_diff_hrs as "time_diff (hrs)",
+            la.distance_km as "distance (km)",
+            la.device_type as "device_type",
+            la.latency_ms as "latency (ms)",
+            la.login_successful as "login_successful",
+            la.is_attack_ip as "is_attack_ip",
+            la.risk_score as "risk_score",
+            la.risk_percentage as "Risk %",
+            la.risk_classification as "Classification",
+            la.recommended_action as "AI Action",
+            la.recommendation_text as "AI Recommendation",
+            la.analysis_factors as "Analysis Factors",
+            la.warnings as "Warnings",
+            la.behavior_consistency as "Behavior %",
+            la.location_context as "Location Context",
+            la.admin_action as "Admin Action"
+        FROM login_activities la
+        ORDER BY la.login_timestamp DESC
+    '''
+    df = pd.read_sql_query(query, conn)
     conn.close()
     
-    if total_reviewed == 0:
-        return 94  # Default accuracy for new system
+    # Parse JSON fields
+    if len(df) > 0:
+        df['Analysis Factors'] = df['Analysis Factors'].apply(lambda x: json.loads(x) if x else [])
+        df['Warnings'] = df['Warnings'].apply(lambda x: json.loads(x) if x else [])
     
-    accuracy = (correct_predictions / total_reviewed) * 100
-    return round(accuracy)
+    return df
 
 def get_false_positives_count():
     """Get count of false positives marked in last 7 days"""
@@ -550,49 +641,125 @@ def get_false_positives_count():
     conn.close()
     return count
 
-def get_risk_reasons():
-    """Get risk reasons for chart - derived from actual data"""
+def get_user_timeline_data(user_id):
+    """Get user's login timeline data for visualization"""
+    conn = get_connection()
+    query = '''
+        SELECT 
+            login_timestamp,
+            country,
+            city,
+            distance_km,
+            device_type,
+            risk_percentage,
+            risk_classification,
+            behavior_consistency,
+            location_context,
+            admin_action,
+            recommended_action,
+            analysis_factors,
+            warnings
+        FROM login_activities 
+        WHERE user_id = ?
+        ORDER BY login_timestamp ASC
+    '''
+    df = pd.read_sql_query(query, conn, params=[user_id])
+    conn.close()
+    
+    if len(df) > 0:
+        df['login_timestamp'] = pd.to_datetime(df['login_timestamp'])
+        df['date'] = df['login_timestamp'].dt.date
+        df['analysis_factors'] = df['analysis_factors'].apply(lambda x: json.loads(x) if x else [])
+        df['warnings'] = df['warnings'].apply(lambda x: json.loads(x) if x else [])
+    
+    return df
+
+def get_user_info(user_id):
+    """Get user information"""
+    conn = get_connection()
+    query = '''
+        SELECT username, email, home_locations, common_devices, created_at
+        FROM users 
+        WHERE user_id = ?
+    '''
+    result = pd.read_sql_query(query, conn, params=[user_id])
+    conn.close()
+    
+    if len(result) > 0:
+        user_data = result.iloc[0]
+        user_data['home_locations'] = json.loads(user_data['home_locations'])
+        user_data['common_devices'] = json.loads(user_data['common_devices'])
+        return user_data
+    return None
+
+def get_user_stats(user_id):
+    """Get user statistics"""
     conn = get_connection()
     
-    # Count different risk factors from the database
-    attack_ip_count = conn.execute("SELECT COUNT(*) FROM login_activities WHERE is_attack_ip = 1").fetchone()[0]
-    impossible_travel_count = conn.execute("SELECT COUNT(*) FROM login_activities WHERE distance_km > 5000").fetchone()[0]
-    failed_login_count = conn.execute("SELECT COUNT(*) FROM login_activities WHERE login_successful = 0").fetchone()[0]
-    high_latency_count = conn.execute("SELECT COUNT(*) FROM login_activities WHERE latency_ms > 1000").fetchone()[0]
+    total_logins = conn.execute('SELECT COUNT(*) FROM login_activities WHERE user_id = ?', [user_id]).fetchone()[0]
+    high_risk = conn.execute('SELECT COUNT(*) FROM login_activities WHERE user_id = ? AND risk_percentage >= 70', [user_id]).fetchone()[0]
+    countries = conn.execute('SELECT COUNT(DISTINCT country) FROM login_activities WHERE user_id = ?', [user_id]).fetchone()[0]
+    avg_behavior = conn.execute('SELECT AVG(behavior_consistency) FROM login_activities WHERE user_id = ?', [user_id]).fetchone()[0]
     
     conn.close()
     
-    # Create DataFrame for chart
-    risk_data = pd.DataFrame({
-        'Reason': ['Failed Login', 'Attack IP', 'Impossible Travel', 'High Latency'],
-        'Count': [failed_login_count, attack_ip_count, impossible_travel_count, high_latency_count]
-    })
+    return {
+        'total_logins': total_logins,
+        'high_risk': high_risk,
+        'countries': countries,
+        'avg_behavior': round(avg_behavior or 0)
+    }
+
+def get_user_location_patterns(user_id):
+    """Get user's location patterns for analysis"""
+    conn = get_connection()
+    query = '''
+        SELECT country, city, COUNT(*) as frequency,
+               AVG(risk_percentage) as avg_risk,
+               MIN(login_timestamp) as first_seen,
+               MAX(login_timestamp) as last_seen
+        FROM login_activities 
+        WHERE user_id = ?
+        GROUP BY country, city
+        ORDER BY frequency DESC
+    '''
+    df = pd.read_sql_query(query, conn, params=[user_id])
+    conn.close()
+    return df
+
+def get_user_device_patterns(user_id):
+    """Get user's device usage patterns"""
+    conn = get_connection()
+    query = '''
+        SELECT device_type, COUNT(*) as frequency,
+               AVG(risk_percentage) as avg_risk,
+               AVG(behavior_consistency) as avg_behavior
+        FROM login_activities 
+        WHERE user_id = ?
+        GROUP BY device_type
+        ORDER BY frequency DESC
+    '''
+    df = pd.read_sql_query(query, conn, params=[user_id])
+    conn.close()
+    return df
+
+def get_user_risk_trends(user_id, days=30):
+    """Get user's risk trends over time"""
+    conn = get_connection()
+    query = '''
+        SELECT DATE(login_timestamp) as date,
+               AVG(risk_percentage) as avg_risk,
+               AVG(behavior_consistency) as avg_behavior,
+               COUNT(*) as login_count
+        FROM login_activities 
+        WHERE user_id = ? AND login_timestamp >= datetime('now', '-{} days')
+        GROUP BY DATE(login_timestamp)
+        ORDER BY date
+    '''.format(days)
+    df = pd.read_sql_query(query, conn, params=[user_id])
+    conn.close()
     
-    return risk_data
-
-# Legacy function aliases for backward compatibility
-def get_login_activities():
-    """Legacy function - redirects to enhanced version"""
-    return get_login_activities_enhanced()
-
-def get_dashboard_metrics():
-    """Legacy function - redirects to enhanced version"""
-    return get_dashboard_metrics_enhanced()
-
-def update_action(activity_id, action):
-    """Legacy function - redirects to enhanced version"""
-    return update_admin_action(activity_id, action)
-
-def predict_risk_score(user_id, current_login_data):
-    """Legacy function - returns just the risk percentage for compatibility"""
-    prediction = get_full_model_prediction(user_id, current_login_data)
-    return prediction['risk_percentage']
-
-def add_login_activity(user_id, country, city, time_diff, distance, device_type, latency, is_attack_ip):
-    """Legacy function - redirects to enhanced version"""
-    prediction = add_login_activity_enhanced(user_id, country, city, time_diff, distance, device_type, latency, is_attack_ip)
-    return prediction['risk_percentage'], prediction['recommendation']
-
-# Initialize fresh database when module is imported
-if not os.path.exists(DATABASE_PATH):
-    initialize_database()
+    if len(df) > 0:
+        df['date'] = pd.to_datetime(df['date'])
+    
+    return df

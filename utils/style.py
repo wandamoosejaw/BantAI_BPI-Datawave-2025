@@ -299,8 +299,7 @@ section[data-testid="stSidebar"]::before {
     section[data-testid="stSidebar"] > div {
         padding-top: 1.5rem !important;
     }
-                
-    # Add to your utils/style.py
+                   
     /* Hide broken Material Icons */
     *:contains("keyboard_arrow") {
         display: none !important;
@@ -312,7 +311,7 @@ section[data-testid="stSidebar"]::before {
     span:contains("keyboard_arrow_double") {
         display: none !important;
         visibility: hidden !important;
-}
+    }
 
     </style>
     """, unsafe_allow_html=True)
