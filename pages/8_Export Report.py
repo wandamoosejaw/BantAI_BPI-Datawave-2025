@@ -88,7 +88,7 @@ st.markdown("---")
 # Preview Section
 st.subheader("📊 Report Preview")
 
-# Get data for preview
+# Get data for preview - SINGLE data loading block
 try:
     df = get_login_activities()
     metrics = get_dashboard_metrics()
@@ -98,6 +98,16 @@ try:
     # Filter data by date range
     df['date'] = pd.to_datetime(df['Login Timestamp (UTC+8)']).dt.date
     filtered_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    
+    # Map column names for PDF generator
+    if len(filtered_df) > 0:
+        filtered_df = filtered_df.rename(columns={
+            "Risk %": "AI Risk Score (0–100)",
+            "AI Action": "Action"
+        })
+        
+        # Handle null values in numeric columns
+        filtered_df['AI Risk Score (0–100)'] = pd.to_numeric(filtered_df['AI Risk Score (0–100)'], errors='coerce').fillna(0)
     
 except Exception as e:
     st.error(f"Error loading data: {e}")
@@ -114,13 +124,13 @@ if len(filtered_df) > 0:
     with col1:
         st.metric("Total Activities", len(filtered_df))
     with col2:
-        high_risk_count = len(filtered_df[filtered_df['Risk %'] >= 70])
+        high_risk_count = len(filtered_df[filtered_df['AI Risk Score (0–100)'] >= 70])
         st.metric("High-Risk Activities", high_risk_count)
     with col3:
         st.metric("Detection Accuracy", f"{detection_accuracy}%")
     with col4:
-       admin_actions = len(filtered_df[filtered_df['Admin Action'].isin(['False Positive', 'True Positive - Blocked'])])
-    st.metric("Admin Actions", admin_actions)
+        admin_actions = len(filtered_df[filtered_df['Action'].isin(['False Positive', 'True Positive - Blocked'])])
+        st.metric("Admin Actions", admin_actions)
     
     st.markdown("**Sample Data (First 5 rows)**")
     st.dataframe(filtered_df.head(), use_container_width=True, hide_index=True)
@@ -144,7 +154,7 @@ st.subheader("🚀 Generate Report")
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("📄 Generate PDF Report", type="primary", use_container_width=True):
+    if st.button("📄 Generate PDF Report", type="primary", use_container_width=True, key="generate_pdf_btn"):
         if len(filtered_df) > 0:
             try:
                 with st.spinner("Generating PDF report..."):
@@ -182,7 +192,8 @@ with col1:
                             data=pdf_file.read(),
                             file_name=f"{report_id}.pdf",
                             mime="application/pdf",
-                            use_container_width=True
+                            use_container_width=True,
+                            key="download_pdf_btn"
                         )
                     
                     st.success("Report generated successfully!")
@@ -194,7 +205,7 @@ with col1:
 
 with col2:
     if report_format == "PDF + CSV Data":
-        if st.button("📊 Download CSV Data", use_container_width=True):
+        if st.button("📊 Download CSV Data", use_container_width=True, key="download_csv_btn"):
             if len(filtered_df) > 0:
                 csv_data = filtered_df.to_csv(index=False)
                 st.download_button(
@@ -202,7 +213,8 @@ with col2:
                     data=csv_data,
                     file_name=f"{report_id}_data.csv",
                     mime="text/csv",
-                    use_container_width=True
+                    use_container_width=True,
+                    key="download_csv_final_btn"
                 )
             else:
                 st.error("No data available for export")

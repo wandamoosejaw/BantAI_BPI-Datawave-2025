@@ -237,23 +237,23 @@ def inject_custom_css():
     }
                 
     /* Nuclear option - hide all possible collapse button selectors */
-        button[kind="header"],
-        button[title="Close sidebar"],
-        button[aria-label="Close sidebar"],
-        button[data-testid*="collaps"],
-        .css-1544g2n,
-        .css-1cypcdb,
-        .css-18ni7ap,
-        [class*="collapse"],
-        [class*="sidebar"][class*="button"],
-        button:contains("keyboard_arrow"),
-        *:contains("keyboard_arrow_double") {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            width: 0 !important;
-            height: 0 !important;
-            overflow: hidden !important;
+    button[kind="header"],
+    button[title="Close sidebar"],
+    button[aria-label="Close sidebar"],
+    button[data-testid*="collaps"],
+    .css-1544g2n,
+    .css-1cypcdb,
+    .css-18ni7ap,
+    [class*="collapse"],
+    [class*="sidebar"][class*="button"],
+    button:contains("keyboard_arrow"),
+    *:contains("keyboard_arrow_double") {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
     }
 
 /* Hide any button in the sidebar header area */
@@ -312,6 +312,52 @@ section[data-testid="stSidebar"]::before {
         display: none !important;
         visibility: hidden !important;
     }
+                
+    /* More aggressive hiding of Streamlit collapse elements */
+    .stSidebarNav button,
+    .css-1544g2n button,
+    button[data-testid="collapsedControl"],
+    button[data-testid="stSidebarCollapseButton"],
+    .streamlit-expanderHeader button,
+    .element-container button[kind="header"],
+    [data-testid="stSidebarUserContent"] button:first-child,
+    .css-1cypcdb {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+    
+    /* Hide by button text content using attribute selector */
+    button[title*="Collapse"],
+    button[aria-label*="Collapse"],
+    button[title*="Close"] {
+        display: none !important;
+    }
+                
+    <script>
+    // JavaScript fallback to catch dynamic elements
+    function hideArrowButtons() {
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            const text = button.textContent || button.innerHTML;
+            if (text.includes('keyboard_arrow') || 
+                text.includes('▲') || 
+                text.includes('▼') ||
+                button.getAttribute('title')?.includes('Collapse') ||
+                button.getAttribute('aria-label')?.includes('Collapse')) {
+                button.style.display = 'none';
+                button.style.visibility = 'hidden';
+            }
+        });
+    }
+    
+    // Run on page load and periodically
+    setTimeout(hideArrowButtons, 500);
+    setTimeout(hideArrowButtons, 1500);
+    setInterval(hideArrowButtons, 3000);
+    </script>
 
     </style>
     """, unsafe_allow_html=True)
